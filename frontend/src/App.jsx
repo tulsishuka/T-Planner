@@ -1,12 +1,15 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/layout/Navbar";
-import HeroSection from "./components/Hero/herosection";
-import Itineraries from "./components/Itineraries";
-import Destinations from "./components/Destinations";
-import Concierge from "./components/concierge";
 import Footer from "./components/layout/Footer";
-import Register from "./components/Register";
 
+import Home from "./pages/Home/Home";
+import Register from "./pages/Register/Register";
+import Login from "./pages/Login/Login";
+
+import DashboardLayout from "./pages/Dashboard/DashboardLayout";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import MyTrips from "./pages/Dashboard/MyTrips";
+import Documents from "./pages/Dashboard/Documents";
 
 function App() {
   return (
@@ -14,14 +17,19 @@ function App() {
       <Navbar />
 
       <Routes>
-        <Route path="/" element={<HeroSection />} />
-        <Route path="/itineraries" element={<Itineraries />} />
-         <Route path="/destinations" element={<Destinations />} />
-                  <Route path="/Concierge" element={<Concierge />} />
-                  <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Home />} />
 
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="trips" element={<MyTrips />} />
+          <Route path="documents" element={<Documents />} />
+        </Route>
       </Routes>
-      <Footer/>
+
+      <Footer />
     </>
   );
 }

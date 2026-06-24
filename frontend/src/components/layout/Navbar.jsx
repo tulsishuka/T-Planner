@@ -4,19 +4,19 @@ const Navbar = () => {
 
     const navLinks = [
   { name: 'Explore', path: '/' },
-  { name: 'Itineraries', path: '/itineraries' },
-  { name: 'Destinations', path: '/destinations' },
-  { name: 'Concierge', path: '/concierge' },
+  { name: 'Dashboard', path: '/dashboard' },
+ 
 ];
 
   return (
     <nav className="w-full bg-white border-b border-gray-100 px-6 py-4 md:px-12 flex items-center justify-between">
-      {/* Left side: Logo & Navigation Links */}
+   
       <div className="flex items-center space-x-10">
         {/* Logo */}
+        <Link to="/">
         <div className="text-[#006A61] font-bold text-2xl tracking-tight cursor-pointer">
           Planner
-        </div>
+        </div></Link>
 
       
 
