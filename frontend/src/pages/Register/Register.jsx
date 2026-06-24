@@ -1,8 +1,84 @@
 import React from 'react';
 import { User, Mail, Lock, Eye, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const Register = () => {
+
+ const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.name.trim()) {
+      return toast.error("Please enter your name");
+    }
+
+    if (!formData.email.trim()) {
+      return toast.error("Please enter your email");
+    }
+
+    if (!formData.password.trim()) {
+      return toast.error("Please enter your password");
+    }
+
+    try {
+      setLoading(true);
+
+      await axios.post(
+        "http://localhost:3000/api/v1/auth/register",
+        {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }
+      );
+
+      toast.success("Account created successfully");
+
+      const userEmail = formData.email;
+
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+      });
+
+      setTimeout(() => {
+        navigate("/verify", {
+          state: { email: userEmail },
+        });
+      }, 1000);
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "Account already exists or something went wrong"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-teal-50/30 flex items-center justify-center p-4 relative overflow-hidden font-sans">
       
@@ -45,8 +121,7 @@ const Register = () => {
           </p>
 
           {/* Form */}
-          <form className="w-full mt-8 space-y-5" onSubmit={(e) => e.preventDefault()}>
-            
+            <form className="w-full mt-8 space-y-5" onSubmit={handleSubmit}>
             {/* Full Name Input */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-600 tracking-wide">Full Name</label>
@@ -54,11 +129,15 @@ const Register = () => {
                 <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
                   <User className="w-4 h-4" />
                 </span>
-                <input 
-                  type="text" 
-                  placeholder="Alex Rivers" 
-                  className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-[#005B52] focus:ring-2 focus:ring-teal-500/10 transition-all text-slate-800 placeholder-slate-300"
-                />
+                
+                <input
+  type="text"
+  name="name"
+  value={formData.name}
+  onChange={handleChange}
+  placeholder="Alex Rivers"
+  className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-[#005B52] focus:ring-2 focus:ring-teal-500/10 transition-all text-slate-800 placeholder-slate-300"
+/>
               </div>
             </div>
 
@@ -69,11 +148,15 @@ const Register = () => {
                 <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
                   <Mail className="w-4 h-4" />
                 </span>
-                <input 
-                  type="email" 
-                  placeholder="alex@voyage.ai" 
-                  className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-[#005B52] focus:ring-2 focus:ring-teal-500/10 transition-all text-slate-800 placeholder-slate-300"
-                />
+                
+                <input
+  type="email"
+  name="email"
+  value={formData.email}
+  onChange={handleChange}
+  placeholder="alex@voyage.ai"
+  className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-[#005B52] focus:ring-2 focus:ring-teal-500/10 transition-all text-slate-800 placeholder-slate-300"
+/>
               </div>
             </div>
 
@@ -84,24 +167,26 @@ const Register = () => {
                 <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
                   <Lock className="w-4 h-4" />
                 </span>
-                <input 
-                  type="password" 
-                  placeholder="••••••••••••" 
-                  className="w-full pl-11 pr-11 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-[#005B52] focus:ring-2 focus:ring-teal-500/10 transition-all text-slate-800 placeholder-slate-300"
-                />
-                <button type="button" className="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600">
-                  <Eye className="w-4 h-4" />
-                </button>
+                <input
+  type="password"
+  name="password"
+  value={formData.password}
+  onChange={handleChange}
+  placeholder="••••••••••••"
+  className="w-full pl-11 pr-11 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-[#005B52] focus:ring-2 focus:ring-teal-500/10 transition-all text-slate-800 placeholder-slate-300"
+/>
+               <button
+  type="submit"
+  disabled={loading}
+  className="w-full py-3.5 bg-[#005B52] text-white text-sm font-semibold rounded-2xl shadow-lg shadow-teal-900/10 hover:bg-[#00473F] active:scale-[0.98] transition-all mt-2 disabled:opacity-50"
+>
+  {loading ? "Creating Account..." : "Create Account"}
+</button>
               </div>
             </div>
 
             {/* Submit Button */}
-            <button 
-              type="submit" 
-              className="w-full py-3.5 bg-[#005B52] text-white text-sm font-semibold rounded-2xl shadow-lg shadow-teal-900/10 hover:bg-[#00473F] active:scale-[0.98] transition-all mt-2"
-            >
-              Create Account
-            </button>
+            
           </form>
 
          
