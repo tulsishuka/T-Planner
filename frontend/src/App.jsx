@@ -10,6 +10,7 @@ import DashboardLayout from "./pages/Dashboard/DashboardLayout";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import MyTrips from "./pages/Dashboard/MyTrips";
 import Documents from "./pages/Dashboard/Documents";
+import Verify from "./pages/Verify/Verify";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
 
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-
+<Route path="/verify" element={<Verify />} />
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="trips" element={<MyTrips />} />
