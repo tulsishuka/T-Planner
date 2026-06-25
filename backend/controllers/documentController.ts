@@ -16,19 +16,7 @@ export const uploadDocument = asyncHandler(
     }
 
     const document =
-      // await TravelDocument.create({
-      //   userId: req.user._id,
 
-      //   tripName: req.body.tripName,
-
-      //   destination: req.body.destination,
-
-      //   fileName: file.filename,
-
-      //   filePath: file.path,
-
-      //   fileType: file.mimetype,
-      // });
 await TravelDocument.create({
   userId: req.user._id,
 
@@ -41,10 +29,6 @@ await TravelDocument.create({
   startDate: req.body.startDate,
 
   endDate: req.body.endDate,
-
-  budget: req.body.budget,
-
-  travelers: req.body.travelers,
 
   notes: req.body.notes,
 
