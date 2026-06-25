@@ -1,8 +1,74 @@
-import React from 'react';
-import { Mail, Lock } from 'lucide-react';
-import { Link } from 'react-router-dom';
+
+import React, { useState } from "react";
+import { Mail, Lock } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/auth/login",
+        formData
+      );
+
+      if (res.data.requiresVerification) {
+        toast.error("Please verify your email. New OTP sent.");
+
+        navigate("/verify", {
+          state: {
+            email: res.data.email,
+          },
+        });
+
+        return;
+      }
+
+      localStorage.setItem("token", res.data.token);
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify(res.data.user)
+      );
+
+      console.log(
+        JSON.parse(localStorage.getItem("user"))
+      );
+
+      toast.success("Login Successful");
+
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "Login failed"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-slate-50 to-teal-50/20 flex flex-col items-center justify-center p-6 relative font-sans">
       
@@ -19,73 +85,94 @@ const Login = () => {
       {/* Main Login Card */}
       <div className="w-full max-w-[420px] bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-slate-100 p-8 md:p-10 flex flex-col">
         
-        {/* Card Title Header */}
         <h2 className="text-xl font-bold text-slate-800">
           Welcome back
         </h2>
+
         <p className="text-xs text-slate-400 mt-1">
           Please enter your details to sign in.
         </p>
 
-        {/* Form Elements */}
-        <form className="w-full mt-6 space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <form
+          className="w-full mt-6 space-y-4"
+          onSubmit={handleSubmit}
+        >
           
-          {/* Email Input Container */}
+          {/* Email */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-slate-700">
               Email Address
             </label>
+
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                 <Mail className="w-4 h-4 stroke-[1.75]" />
               </span>
-              <input 
-                type="email" 
-                placeholder="alex@example.com" 
+
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="alex@example.com"
+                required
                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#005B52] focus:ring-1 focus:ring-[#005B52] transition-all text-slate-800 placeholder-slate-300"
               />
             </div>
           </div>
 
-          {/* Password Input Container */}
+          {/* Password */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-slate-700">
                 Password
               </label>
-              <a href="#forgot" className="text-[11px] font-medium text-teal-600 hover:underline">
+
+              <Link
+                to="/forgot"
+                className="text-[11px] font-medium text-teal-600 hover:underline"
+              >
                 Forgot?
-              </a>
+              </Link>
             </div>
+
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                 <Lock className="w-4 h-4 stroke-[1.75]" />
               </span>
-              <input 
-                type="password" 
-                placeholder="••••••••" 
+
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                required
                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#005B52] focus:ring-1 focus:ring-[#005B52] transition-all text-slate-800 placeholder-slate-300"
               />
             </div>
           </div>
 
-          {/* Action Sign-In Button */}
-          <button 
-            type="submit" 
-            className="w-full py-2.5 bg-[#005B52] text-white text-xs font-semibold rounded-xl hover:bg-[#00473F] active:scale-[0.99] transition-all pt-3 mt-2"
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2.5 bg-[#005B52] text-white text-xs font-semibold rounded-xl hover:bg-[#00473F] active:scale-[0.99] transition-all pt-3 mt-2 disabled:opacity-70"
           >
-            Sign In
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
+
         <p className="text-xs text-slate-500 mt-6 text-center">
-          New to VoyageAI?{' '}
-          <Link to="/register" className="text-[#005B52] font-bold hover:underline">
+          New to VoyageAI?{" "}
+          <Link
+            to="/register"
+            className="text-[#005B52] font-bold hover:underline"
+          >
             Create an account
           </Link>
         </p>
       </div>
-
-     
     </div>
   );
 };
