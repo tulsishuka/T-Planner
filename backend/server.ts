@@ -4,7 +4,7 @@ import { connectDB } from "./config/database.config";
 import app from "./app";
 
 dotenv.config(); 
-
+console.log("SERVER KEY:", process.env.GEMINI_API_KEY);
 
 const startServer = async () => {
   try {

@@ -1,5 +1,3 @@
-
-
 import mongoose from "mongoose";
 
 const documentSchema = new mongoose.Schema(
@@ -25,6 +23,9 @@ const documentSchema = new mongoose.Schema(
       default: "Adventure",
     },
 
+    itinerary: {
+  type: String,
+},
     startDate: Date,
 
     endDate: Date,

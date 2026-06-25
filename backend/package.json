@@ -1,12 +1,15 @@
 {
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "fs-extra": "^11.3.5",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.2",
     "multer": "^2.2.0",
+    "pdf-parse": "^2.4.5",
     "sib-api-v3-sdk": "^8.5.0"
   },
   "devDependencies": {
@@ -16,6 +19,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.1.0",
     "@types/node": "^26.0.0",
+    "@types/pdf-parse": "^1.1.5",
     "nodemon": "^3.1.14"
   }
 }

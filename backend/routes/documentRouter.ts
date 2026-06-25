@@ -4,6 +4,8 @@ import {
   uploadDocument,
   getDocuments,
   updateDocument,
+  deleteDocument,
+  getDocumentById,
 } from "../controllers/documentController";
 
 import { protectedMiddleware } from "../middlewares/authMiddleware";
@@ -16,20 +18,15 @@ router.post(
   "/upload",
   protectedMiddleware,
   upload.single("document"),
- 
   uploadDocument
 );
 
-router.get(
-  "/",
-  protectedMiddleware,
-  getDocuments
-);
+router.get("/", protectedMiddleware, getDocuments);
 
-router.put(
-  "/:id",
-  protectedMiddleware,
-  updateDocument
-);
+router.get("/:id", protectedMiddleware, getDocumentById);
+
+router.put("/:id", protectedMiddleware, updateDocument);
+
+router.delete("/:id", protectedMiddleware, deleteDocument);
 
 export default router;
