@@ -17,7 +17,10 @@ const documentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
+shareId: {
+  type: String,
+  unique: true,
+},
     travelStyle: {
       type: String,
       default: "Adventure",
@@ -49,3 +52,6 @@ export const TravelDocument = mongoose.model(
   "TravelDocument",
   documentSchema
 );
+
+
+

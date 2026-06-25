@@ -5,6 +5,7 @@ import { TravelDocument } from "../models/documentModel";
 import fs from "fs";
 import { model } from "../config/gemini";
 import { extractTextFromFile } from "../utils/extractText";
+import { v4 as uuidv4 } from "uuid";
 
 interface AuthRequest extends Request {
   user?: any;
@@ -64,8 +65,8 @@ export const uploadDocument = asyncHandler(
           `,
         ]);
 
-      itinerary =
-        result.response.text();
+      
+      itinerary =  result.response.text();
     }
 
     // PDF
@@ -101,30 +102,53 @@ ${extractedText}
     }
 console.log("EXTRACTED TEXT SENT TO GEMINI:");
 console.log(extractedText);
+const shareId = uuidv4();
+    // const document =
+    //   await TravelDocument.create({
+    //     userId: req.user._id,
+
+    //     tripName: req.body.tripName,
+
+    //     destination: req.body.destination,
+
+    //     travelStyle: req.body.travelStyle,
+
+    //     itinerary,
+
+    //     startDate: req.body.startDate,
+
+    //     endDate: req.body.endDate,
+
+    //     notes: req.body.notes,
+
+    //     fileName: file.filename,
+
+    //     filePath: file.path,
+
+    //     fileType: file.mimetype,
+    //   });
+
     const document =
-      await TravelDocument.create({
-        userId: req.user._id,
+  await TravelDocument.create({
+    userId: req.user._id,
 
-        tripName: req.body.tripName,
+    tripName: req.body.tripName,
+    destination: req.body.destination,
+    travelStyle: req.body.travelStyle,
 
-        destination: req.body.destination,
+    itinerary,
 
-        travelStyle: req.body.travelStyle,
+    shareId,
 
-        itinerary,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
 
-        startDate: req.body.startDate,
+    notes: req.body.notes,
 
-        endDate: req.body.endDate,
-
-        notes: req.body.notes,
-
-        fileName: file.filename,
-
-        filePath: file.path,
-
-        fileType: file.mimetype,
-      });
+    fileName: file.filename,
+    filePath: file.path,
+    fileType: file.mimetype,
+  });
 
     res.status(201).json({
       success: true,
@@ -212,6 +236,26 @@ export const deleteDocument = asyncHandler(
     res.status(200).json({
       success: true,
       message: "Trip deleted successfully",
+    });
+  }
+);
+
+
+////////////////
+export const getSharedTrip = asyncHandler(
+  async (req: Request, res: Response) => {
+    const trip = await TravelDocument.findOne({
+      shareId: req.params.shareId,
+    });
+
+    if (!trip) {
+      res.status(404);
+      throw new Error("Trip not found");
+    }
+
+    res.status(200).json({
+      success: true,
+      trip,
     });
   }
 );

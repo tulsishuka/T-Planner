@@ -11,6 +11,8 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import MyTrips from "./pages/Dashboard/MyTrips";
 import Documents from "./pages/Dashboard/Documents";
 import Verify from "./pages/Verify/Verify";
+import SharedTrip from "./pages/SharedTrip/SharedTrip";
+
 
 function App() {
   return (
@@ -22,13 +24,16 @@ function App() {
 
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+          <Route path="/share/:shareId" element={<SharedTrip />} />
 <Route path="/verify" element={<Verify />} />
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="trips" element={<MyTrips />} />
           <Route path="documents" element={<Documents />} />
+         
         </Route>
       </Routes>
+     
 
       <Footer />
     </>

@@ -6,6 +6,7 @@ import {
   updateDocument,
   deleteDocument,
   getDocumentById,
+  getSharedTrip,
 } from "../controllers/documentController";
 
 import { protectedMiddleware } from "../middlewares/authMiddleware";
@@ -28,5 +29,9 @@ router.get("/:id", protectedMiddleware, getDocumentById);
 router.put("/:id", protectedMiddleware, updateDocument);
 
 router.delete("/:id", protectedMiddleware, deleteDocument);
+router.get(
+  "/share/:shareId",
+  getSharedTrip
+);
 
 export default router;
