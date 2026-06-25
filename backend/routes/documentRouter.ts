@@ -18,9 +18,15 @@ const router = Router();
 router.post(
   "/upload",
   protectedMiddleware,
-  upload.single("document"),
+  upload.array("document", 20), // up to 20 files
   uploadDocument
 );
+// router.post(
+//   "/upload",
+//   protectedMiddleware,
+//   upload.array("document"), // ✅ FIX HERE
+//   uploadDocument
+// );
 
 router.get("/", protectedMiddleware, getDocuments);
 

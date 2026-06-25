@@ -5,157 +5,188 @@ import { TravelDocument } from "../models/documentModel";
 import fs from "fs";
 import { model } from "../config/gemini";
 import { extractTextFromFile } from "../utils/extractText";
+
 import { v4 as uuidv4 } from "uuid";
 
 interface AuthRequest extends Request {
   user?: any;
 }
-
 export const uploadDocument = asyncHandler(
   async (req: AuthRequest, res: Response) => {
-    const file = req.file;
-    console.log("FILE RECEIVED:", file);
+    const files = req.files as Express.Multer.File[];
 
-    if (!file) {
+    if (!files || files.length === 0) {
       res.status(400);
-      throw new Error("Please upload a file");
+      throw new Error("Please upload files");
     }
 
-    let extractedText = "";
+    const shareId = uuidv4();
+    const fileResults = [];
 
-    // PDF
-    if (file.mimetype === "application/pdf") {
-      extractedText = await extractTextFromFile(
-        file.path,
-        file.mimetype
-      );
-    }
+    for (const file of files) {
+      let rawResponse = "";
+      let extractedData: any = {};
 
+      try {
+        // IMAGE
+        if (file.mimetype.startsWith("image/")) {
+          const base64 = fs.readFileSync(file.path).toString("base64");
 
-    let itinerary = "";
-
-    // IMAGE
-    if (
-      file.mimetype.startsWith("image/")
-    ) {
-      const imageBase64 = fs
-        .readFileSync(file.path)
-        .toString("base64");
-
-      const result =
-        await model.generateContent([
-          {
-            inlineData: {
-              data: imageBase64,
-              mimeType: file.mimetype,
+          const result = await model.generateContent([
+            {
+              inlineData: {
+                data: base64,
+                mimeType: file.mimetype,
+              },
             },
-          },
+            `Return ONLY JSON with flight details`,
+          ]);
 
-          `
-          Analyze this travel document.
+          rawResponse = result.response.text();
+        }
 
-          Extract:
-          - Flights
-          - Hotels
-          - Booking numbers
-          - Dates
-          - Locations
+        // PDF
+        else if (file.mimetype === "application/pdf") {
+          const text = await extractTextFromFile(file.path, file.mimetype);
 
-          Then generate a detailed travel itinerary.
-          `,
-        ]);
+          const result = await model.generateContent(`
+Extract JSON from:
+${text}
+Return ONLY JSON
+          `);
 
-      
-      itinerary =  result.response.text();
+          rawResponse = result.response.text();
+        }
+
+        // SAFE JSON PARSE
+        const match = rawResponse.match(/\{[\s\S]*\}/);
+
+        if (match) {
+          try {
+            extractedData = JSON.parse(match[0]);
+          } catch {
+            extractedData = {};
+          }
+        }
+
+        fileResults.push({
+          fileName: file.filename,
+          filePath: file.path,
+          fileType: file.mimetype,
+          extractedData,
+        });
+      } catch (err) {
+        console.log("FILE PROCESS ERROR:", err);
+
+        fileResults.push({
+          fileName: file.filename,
+          filePath: file.path,
+          fileType: file.mimetype,
+          extractedData: {},
+        });
+      }
     }
 
-    // PDF
-    else {
-      const result =
-        await model.generateContent(`
-Generate a professional travel itinerary.
+    const document = await TravelDocument.create({
+      userId: req.user._id,
+      shareId,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
+      notes: req.body.notes,
+      files: fileResults,
+    });
 
-Trip Name:
-${req.body.tripName}
-
-Destination:
-${req.body.destination}
-
-Travel Style:
-${req.body.travelStyle}
-
-Start Date:
-${req.body.startDate}
-
-End Date:
-${req.body.endDate}
-
-Notes:
-${req.body.notes}
-
-Extracted Document Data:
-${extractedText}
-`);
-
-      itinerary =
-        result.response.text();
-    }
-console.log("EXTRACTED TEXT SENT TO GEMINI:");
-console.log(extractedText);
-const shareId = uuidv4();
-    // const document =
-    //   await TravelDocument.create({
-    //     userId: req.user._id,
-
-    //     tripName: req.body.tripName,
-
-    //     destination: req.body.destination,
-
-    //     travelStyle: req.body.travelStyle,
-
-    //     itinerary,
-
-    //     startDate: req.body.startDate,
-
-    //     endDate: req.body.endDate,
-
-    //     notes: req.body.notes,
-
-    //     fileName: file.filename,
-
-    //     filePath: file.path,
-
-    //     fileType: file.mimetype,
-    //   });
-
-    const document =
-  await TravelDocument.create({
-    userId: req.user._id,
-
-    tripName: req.body.tripName,
-    destination: req.body.destination,
-    travelStyle: req.body.travelStyle,
-
-    itinerary,
-
-    shareId,
-
-    startDate: req.body.startDate,
-    endDate: req.body.endDate,
-
-    notes: req.body.notes,
-
-    fileName: file.filename,
-    filePath: file.path,
-    fileType: file.mimetype,
-  });
-
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       document,
     });
   }
 );
+
+
+
+// export const uploadDocument = asyncHandler(
+//   async (req: AuthRequest, res: Response) => {
+//     const files = req.files as Express.Multer.File[];
+
+//     if (!files || files.length === 0) {
+//       res.status(400);
+//       throw new Error("Please upload files");
+//     }
+
+//     const shareId = uuidv4();
+
+//     const fileResults = [];
+
+//     for (const file of files) {
+//       let rawResponse = "";
+//       let extractedData: any = {};
+
+//       // IMAGE
+//       if (file.mimetype.startsWith("image/")) {
+//         const base64 = fs.readFileSync(file.path).toString("base64");
+
+//         const result = await model.generateContent([
+//           {
+//             inlineData: {
+//               data: base64,
+//               mimeType: file.mimetype,
+//             },
+//           },
+//           `Return ONLY JSON with flight details`,
+//         ]);
+
+//         rawResponse = result.response.text();
+//       }
+
+//       // PDF
+//       if (file.mimetype === "application/pdf") {
+//         const text = await extractTextFromFile(file.path, file.mimetype);
+
+//         const result = await model.generateContent(`
+// Extract JSON from:
+// ${text}
+// Return ONLY JSON
+//         `);
+
+//         rawResponse = result.response.text();
+//       }
+
+//       // SAFE JSON PARSE
+//       const match = rawResponse.match(/\{[\s\S]*\}/);
+//       if (match) {
+//         try {
+//           extractedData = JSON.parse(match[0]);
+//         } catch {
+//           extractedData = {};
+//         }
+//       }
+
+//       fileResults.push({
+//         fileName: file.filename,
+//         filePath: file.path,
+//         fileType: file.mimetype,
+//         extractedData,
+//       });
+//     }
+
+//     // SAVE ONLY ONE DOCUMENT
+//     const document = await TravelDocument.create({
+//       userId: req.user._id,
+//       shareId,
+//       startDate: req.body.startDate,
+//       endDate: req.body.endDate,
+//       notes: req.body.notes,
+//       files: fileResults,
+//     });
+
+//     return res.status(201).json({
+//       success: true,
+//       document,
+//     });
+//   }
+// );
+
 
 export const getDocuments = asyncHandler(
   async (req: AuthRequest, res: Response) => {
@@ -178,9 +209,7 @@ export const updateDocument = asyncHandler(
         userId: req.user._id,
       },
       {
-        tripName: req.body.tripName,
-        destination: req.body.destination,
-        travelStyle: req.body.travelStyle,
+       
         startDate: req.body.startDate,
         endDate: req.body.endDate,
         notes: req.body.notes,
@@ -258,4 +287,4 @@ export const getSharedTrip = asyncHandler(
       trip,
     });
   }
-);
+)

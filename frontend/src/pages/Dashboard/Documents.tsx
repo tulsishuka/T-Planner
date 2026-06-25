@@ -1,19 +1,168 @@
+// import React, { useState } from "react";
+// import axios from "axios";
+
+// const Documents = () => {
+//   const [startDate, setStartDate] = useState("");
+//   const [endDate, setEndDate] = useState("");
+//   const [notes, setNotes] = useState("");
+//   const [files, setFiles] = useState<File[]>([]);
+//   const [loading, setLoading] = useState(false);
+
+//   const handleSubmit = async () => {
+//     try {
+//       setLoading(true);
+
+//       const token = localStorage.getItem("token");
+
+//       const formData = new FormData();
+
+//       formData.append("startDate", startDate);
+//       formData.append("endDate", endDate);
+//       formData.append("notes", notes);
+
+//       // ✅ multiple files
+//       files.forEach((file) => {
+//         formData.append("document", file);
+//       });
+
+//       const res = await axios.post(
+//         "http://localhost:3000/api/documents/upload",
+//         formData,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//             "Content-Type": "multipart/form-data",
+//           },
+//         }
+//       );
+
+//       console.log("UPLOAD SUCCESS:", res.data);
+
+//       alert("Trip created successfully!");
+
+//       setStartDate("");
+//       setEndDate("");
+//       setNotes("");
+//       setFiles([]);
+//     } catch (error) {
+//       console.log(error);
+//       alert("Upload failed");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-200 flex justify-center py-10 px-4">
+//       <div className="bg-white w-full max-w-3xl p-8 rounded-2xl shadow-lg">
+
+//         {/* HEADER */}
+//         <h1 className="text-3xl font-bold mb-2 text-slate-800">
+//           ✈ Create AI Trip
+//         </h1>
+//         <p className="text-gray-500 mb-6">
+//           Upload multiple travel documents and generate AI itinerary
+//         </p>
+
+//         {/* DATES */}
+//         <div className="grid grid-cols-2 gap-4">
+//           <input
+//             type="date"
+//             className="border p-3 rounded-lg"
+//             value={startDate}
+//             onChange={(e) => setStartDate(e.target.value)}
+//           />
+
+//           <input
+//             type="date"
+//             className="border p-3 rounded-lg"
+//             value={endDate}
+//             onChange={(e) => setEndDate(e.target.value)}
+//           />
+//         </div>
+
+//         {/* NOTES */}
+//         <textarea
+//           className="w-full border p-3 rounded-lg mt-4"
+//           rows={4}
+//           placeholder="Enter trip notes..."
+//           value={notes}
+//           onChange={(e) => setNotes(e.target.value)}
+//         />
+
+//         {/* FILE UPLOAD BOX */}
+//         <div className="mt-5 border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:bg-gray-50 transition">
+//           <input
+//             type="file"
+//             multiple
+//             className="hidden"
+//             id="fileUpload"
+//             onChange={(e) => {
+//               if (e.target.files) {
+//                 setFiles(Array.from(e.target.files));
+//               }
+//             }}
+//           />
+        
+
+//           <label
+//             htmlFor="fileUpload"
+//             className="cursor-pointer text-gray-600"
+//           >
+//             📂 Click to upload files (PDF, JPG, PNG)
+//           </label>
+//         </div>
+
+//         {/* FILE LIST */}
+//         {files.length > 0 && (
+//           <div className="mt-4 bg-gray-50 p-3 rounded-lg">
+//             <p className="font-semibold mb-2">Selected Files:</p>
+
+//             {files.map((file, i) => (
+//               <div key={i} className="text-sm text-gray-700">
+//                 📄 {file.name}
+//               </div>
+//             ))}
+//           </div>
+//         )}
+
+//         {/* BUTTON */}
+//         <button
+//           onClick={handleSubmit}
+//           disabled={loading}
+//           className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition"
+//         >
+//           {loading ? "Generating AI Trip..." : "Generate Trip"}
+//         </button>
+
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Documents;
+
+
+
+
+
+
+
 import React, { useState } from "react";
 import axios from "axios";
 
 const Documents = () => {
-const [tripName, setTripName] = useState("");
-const [destination, setDestination] = useState("");
-const [travelStyle, setTravelStyle] = useState("Adventure");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [notes, setNotes] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
 
-const [startDate, setStartDate] = useState("");
-const [endDate, setEndDate] = useState("");
-
-const [notes, setNotes] = useState("");
-
-const [file, setFile] = useState<File | null>(null);
-
-const [loading, setLoading] = useState(false);
+  const removeFile = (index: number) => {
+    setFiles((prevFiles) =>
+      prevFiles.filter((_, i) => i !== index)
+    );
+  };
 
   const handleSubmit = async () => {
     try {
@@ -23,17 +172,13 @@ const [loading, setLoading] = useState(false);
 
       const formData = new FormData();
 
-      formData.append("tripName", tripName);
-      formData.append("destination", destination);
-      formData.append("travelStyle", travelStyle);
-
       formData.append("startDate", startDate);
       formData.append("endDate", endDate);
-     formData.append("notes", notes);
+      formData.append("notes", notes);
 
-      if (file) {
+      files.forEach((file) => {
         formData.append("document", file);
-      }
+      });
 
       const response = await axios.post(
         "http://localhost:3000/api/documents/upload",
@@ -45,18 +190,14 @@ const [loading, setLoading] = useState(false);
         }
       );
 
-      console.log(response.data);
+      console.log("UPLOAD SUCCESS:", response.data);
 
-      alert("Trip created successfully");
+      alert("Trip created successfully!");
 
-      setTripName("");
-      setDestination("");
-      setTravelStyle("Adventure");
       setStartDate("");
       setEndDate("");
-     
       setNotes("");
-      setFile(null);
+      setFiles([]);
     } catch (error) {
       console.error(error);
       alert("Upload failed");
@@ -66,180 +207,119 @@ const [loading, setLoading] = useState(false);
   };
 
   return (
-<div className="bg-[#EDF2FC] min-h-screen py-12 px-6 flex justify-center">
-  <div className="max-w-9xl w-full">
-    
-    <div className="mb-8">
-      <h1 className="text-3xl font-bold text-[#0D233A]">
-        Create New Trip
-      </h1>
+    <div className="min-h-screen bg-slate-100 flex justify-center py-10 px-4">
+      <div className="bg-white w-full max-w-3xl p-8 rounded-2xl shadow-lg">
 
-      <p className="text-gray-500 mt-2">
-        Fill in your trip details and upload your travel documents.
-      </p>
-    </div>
+        <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          ✈ Create AI Trip
+        </h1>
 
-    <div className="bg-white rounded-3xl shadow-sm p-8">
-      
-      <form
-        className="space-y-5"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
-
-        {/* Trip Name */}
-        <div>
-          <label className="block text-sm font-semibold mb-2">
-            Trip Name
-          </label>
-
-          <input
-            type="text"
-            value={tripName}
-            onChange={(e) => setTripName(e.target.value)}
-            placeholder="Summer in Amalfi"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3"
-          />
-        </div>
-
-        {/* Destination */}
-        <div>
-          <label className="block text-sm font-semibold mb-2">
-            Destination
-          </label>
-
-          <input
-            type="text"
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
-            placeholder="Paris, France"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3"
-          />
-        </div>
-
-        {/* Travel Style */}
-        <div>
-          <label className="block text-sm font-semibold mb-2">
-            Travel Style
-          </label>
-
-          <select
-            value={travelStyle}
-            onChange={(e) => setTravelStyle(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3"
-          >
-            <option value="Adventure">Adventure</option>
-            <option value="Relaxation">Relaxation</option>
-            <option value="Business">Business</option>
-          </select>
-        </div>
+        <p className="text-gray-500 mb-6">
+          Upload multiple travel documents and generate an AI itinerary
+        </p>
 
         {/* Dates */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-semibold mb-2">
-              Start Date
-            </label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="border p-3 rounded-lg"
+          />
 
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold mb-2">
-              End Date
-            </label>
-
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3"
-            />
-          </div>
-        </div>
-
-        {/* Budget + Travelers */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        
-
-         
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="border p-3 rounded-lg"
+          />
         </div>
 
         {/* Notes */}
-      
-        {/* Upload */}
-        <div>
-          <label className="block text-sm font-semibold mb-2">
-            Travel Documents
+        <textarea
+          rows={4}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Enter trip notes..."
+          className="w-full border p-3 rounded-lg mt-4"
+        />
+
+        {/* Upload Box */}
+        <div className="mt-5 border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
+
+          <input
+            id="fileUpload"
+            type="file"
+            multiple
+            accept=".pdf,.png,.jpg,.jpeg"
+            className="hidden"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const selectedFiles = e.target.files;
+
+              if (!selectedFiles) return;
+
+              const newFiles = Array.from(selectedFiles);
+
+              setFiles((prevFiles) => [
+                ...prevFiles,
+                ...newFiles,
+              ]);
+            }}
+          />
+
+          <label
+            htmlFor="fileUpload"
+            className="cursor-pointer text-blue-600 font-semibold"
+          >
+            📂 Click to Upload Files
           </label>
 
-          <label className="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-2xl p-8 cursor-pointer hover:bg-gray-50">
-            
-            <span className="text-gray-500">
-              Click to upload PDF, PNG, JPG
-            </span>
-
-           <input
-  type="file"
-  accept=".pdf,.png,.jpg,.jpeg"
-  className="hidden"
-  onChange={(e) => {
-    const selectedFile = e.target.files?.[0];
-
-    if (selectedFile) {
-      setFile(selectedFile);
-    }
-  }}
-/>
-          </label>
-
-{file && (
-  <div className="mt-3 p-3 bg-green-50 rounded-lg">
-    <p className="text-green-700 text-sm">
-      {file.name}
-    </p>
-  </div>
-)}
+          <p className="text-sm text-gray-500 mt-2">
+            PDF, PNG, JPG, JPEG supported
+          </p>
         </div>
 
-{/* Notes */}
-<div>
-  <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
-    Notes
-  </label>
+        {/* Selected Files */}
+        {files.length > 0 && (
+          <div className="mt-5 bg-gray-50 rounded-xl p-4">
+            <h3 className="font-semibold mb-3">
+              Selected Files ({files.length})
+            </h3>
 
-  <textarea
-    rows={4}
-    value={notes}
-    onChange={(e) => setNotes(e.target.value)}
-    placeholder="Any special requests, activities, food preferences, hotel requirements, etc."
-    className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-teal-500 resize-none transition-colors"
-  />
-</div>
+            <div className="space-y-2">
+              {files.map((file, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between bg-white border rounded-lg p-3"
+                >
+                  <span className="text-sm truncate">
+                    📄 {file.name}
+                  </span>
 
+                  <button
+                    type="button"
+                    onClick={() => removeFile(index)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
-        {/* Submit */}
+        {/* Submit Button */}
         <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-[#006652] hover:bg-[#005242] text-white py-3 rounded-xl font-semibold"
+          onClick={handleSubmit}
+          disabled={loading || files.length === 0}
+          className="w-full mt-6 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold"
         >
-          {loading
-            ? "Uploading..."
-            : "Generate AI Itinerary"}
+          {loading ? "Generating AI Trip..." : "Generate Trip"}
         </button>
 
-      </form>
+      </div>
     </div>
-  </div>
-</div>
   );
 };
 

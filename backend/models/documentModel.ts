@@ -1,3 +1,51 @@
+// import mongoose from "mongoose";
+
+// const documentSchema = new mongoose.Schema(
+//   {
+//     userId: {
+//       type: mongoose.Schema.Types.ObjectId,
+//       ref: "User",
+//       required: true,
+//     },
+
+  
+// shareId: {
+//   type: String,
+//   unique: true,
+// },
+   
+
+//     itinerary: {
+//   type: String,
+// },
+// extractedData: {
+//   type: Object,
+// },
+//     startDate: Date,
+
+//     endDate: Date,
+
+  
+
+//     notes: String,
+
+//     fileName: String,
+
+//     filePath: String,
+
+//     fileType: String,
+//   },
+//   {
+//     timestamps: true,
+//   }
+// );
+
+// export const TravelDocument = mongoose.model(
+//   "TravelDocument",
+//   documentSchema
+// );
+
+
 import mongoose from "mongoose";
 
 const documentSchema = new mongoose.Schema(
@@ -8,50 +56,27 @@ const documentSchema = new mongoose.Schema(
       required: true,
     },
 
-    tripName: {
+    shareId: {
       type: String,
-      required: true,
+      unique: true,
     },
 
-    destination: {
-      type: String,
-      required: true,
-    },
-shareId: {
-  type: String,
-  unique: true,
-},
-    travelStyle: {
-      type: String,
-      default: "Adventure",
-    },
-
-    itinerary: {
-  type: String,
-},
     startDate: Date,
-
     endDate: Date,
-
-  
-
     notes: String,
 
-    fileName: String,
-
-    filePath: String,
-
-    fileType: String,
+    files: [
+      {
+        fileName: String,
+        filePath: String,
+        fileType: String,
+        extractedData: Object,
+      },
+    ],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
-
 export const TravelDocument = mongoose.model(
   "TravelDocument",
   documentSchema
 );
-
-
-
