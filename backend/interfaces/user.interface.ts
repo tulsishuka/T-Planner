@@ -5,7 +5,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
 
-  role: "user" | "admin";   // ✅ better than boolean
+   
 
   otp?: string;
   otpExpires?: Date;
@@ -14,3 +14,4 @@ export interface IUser extends Document {
   resetToken?: string;
   resetTokenExpires?: Date;
 }
+// role: "user" | "admin"; 

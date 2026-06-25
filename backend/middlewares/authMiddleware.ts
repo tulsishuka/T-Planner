@@ -1,18 +1,73 @@
 
+// import { Request, Response, NextFunction } from "express";
+// import jwt, { JwtPayload } from "jsonwebtoken";
+// import asyncHandler from "./asyncHandler";
+// import { User } from "../models/userModel";
+
+
+// interface AuthRequest extends Request {
+//   user?: any;
+// }
+
+// export const protectedMiddleware = asyncHandler(
+//   async (req: AuthRequest, res: Response, next: NextFunction) => {
+//     let token =
+//       req.cookies?.jwt || req.headers.authorization?.split(" ")[1];
+
+//     if (!token) {
+//       res.status(401);
+//       throw new Error("Access denied! Token not found.");
+//     }
+
+//     try {
+//       const decoded = jwt.verify(
+//         token,
+//         process.env.JWT_SECRET as string
+//       ) as JwtPayload;
+
+//       req.user = await User.findById(decoded.id).select("-password");
+
+//       return next();
+//     } catch (error) {
+//       res.status(401);
+//       throw new Error("Access denied! Token is invalid or expired.");
+//     }
+//   }
+// );
+
+// export const adminMiddleware = (
+//   req: AuthRequest,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   if (req.user && req.user.role === "admin") {
+//     next();
+//   } else {
+//     res.status(401);
+//     throw new Error("Access denied! You are not an admin.");
+//   }
+// };
+
+
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import asyncHandler from "./asyncHandler";
 import { User } from "../models/userModel";
-
+import { IUser } from "../interfaces/user.interface";
 
 interface AuthRequest extends Request {
-  user?: any;
+  user?: IUser;
 }
 
 export const protectedMiddleware = asyncHandler(
-  async (req: AuthRequest, res: Response, next: NextFunction) => {
-    let token =
-      req.cookies?.jwt || req.headers.authorization?.split(" ")[1];
+  async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const token =
+      req.cookies?.jwt ||
+      req.headers.authorization?.split(" ")[1];
 
     if (!token) {
       res.status(401);
@@ -25,25 +80,16 @@ export const protectedMiddleware = asyncHandler(
         process.env.JWT_SECRET as string
       ) as JwtPayload;
 
-      req.user = await User.findById(decoded.id).select("-password");
+      req.user = await User.findById(
+        decoded.id
+      ).select("-password");
 
-      return next();
-    } catch (error) {
+      next();
+    } catch {
       res.status(401);
-      throw new Error("Access denied! Token is invalid or expired.");
+      throw new Error(
+        "Access denied! Token is invalid or expired."
+      );
     }
   }
 );
-
-export const adminMiddleware = (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  if (req.user && req.user.role === "admin") {
-    next();
-  } else {
-    res.status(401);
-    throw new Error("Access denied! You are not an admin.");
-  }
-};

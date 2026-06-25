@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import * as authService from "../services/auth.service";
-import { generateToken } from "../utils/generateToken";
 import { sendEmail } from "../utils/sendEmail";
 import asyncHandler from "../middlewares/asyncHandler";
+import { generateToken } from "../utils/generateToken";
 
 /**
  * @desc Register user and send OTP
@@ -61,9 +61,8 @@ export const login = asyncHandler(
     }
 
     const token = generateToken(
-      result._id.toString(),
-      result.role
-    );
+  result._id.toString()
+);
 
     return res.status(200).json({
       success: true,
@@ -71,7 +70,7 @@ export const login = asyncHandler(
       user: {
         name: result.name,
         email: result.email,
-        role: result.role,
+       
          _id: result._id,
       },
       message: "Login successful",

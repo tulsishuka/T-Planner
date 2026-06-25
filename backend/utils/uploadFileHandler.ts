@@ -4,9 +4,13 @@ import { Request } from "express";
 import path from "path";
 
 const FILETYPE: { [key: string]: string } = {
-  "image/png": "png",
+  // "image/png": "png",
+  // "image/jpeg": "jpeg",
+  // "image/jpg": "jpg",
+   "image/png": "png",
   "image/jpeg": "jpeg",
   "image/jpg": "jpg",
+  "application/pdf": "pdf",
 };
 
 const storage = multer.diskStorage({
