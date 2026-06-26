@@ -2,6 +2,12 @@
 
 An AI-powered travel itinerary planner built with the MERN stack. Users can upload travel booking documents (PDFs or images), extract booking details using AI, and automatically generate a personalized travel itinerary.
 
+<img width="1521" height="692" alt="Screenshot 2026-06-26 143057" src="https://github.com/user-attachments/assets/bfabbea6-707e-421d-a5cc-9db1174dc19a" />
+
+<img width="1521" height="688" alt="Screenshot 2026-06-26 143212" src="https://github.com/user-attachments/assets/f1eb9875-20a4-4a9f-b881-80a5c2d5c48e" />
+
+
+
 ## 🚀 Live Demo
 
 🌐 Live Application: https://t-planner-2-fro.onrender.com/
