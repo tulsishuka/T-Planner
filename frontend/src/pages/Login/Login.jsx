@@ -71,8 +71,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-slate-50 to-teal-50/20 flex flex-col items-center justify-center p-6 relative font-sans">
-      
-      {/* Top Header Branding */}
+
       <div className="text-center mb-8">
         <h1 className="text-2xl font-bold text-[#005B52] tracking-wide">
           VoyageAI
@@ -82,7 +81,6 @@ const Login = () => {
         </p>
       </div>
 
-      {/* Main Login Card */}
       <div className="w-full max-w-[420px] bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-slate-100 p-8 md:p-10 flex flex-col">
         
         <h2 className="text-xl font-bold text-slate-800">
@@ -97,8 +95,7 @@ const Login = () => {
           className="w-full mt-6 space-y-4"
           onSubmit={handleSubmit}
         >
-          
-          {/* Email */}
+ 
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-slate-700">
               Email Address
@@ -121,7 +118,6 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Password */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-slate-700">
@@ -150,10 +146,8 @@ const Login = () => {
                 required
                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#005B52] focus:ring-1 focus:ring-[#005B52] transition-all text-slate-800 placeholder-slate-300"
               />
-            </div>
-          </div>
+            </div>  </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
