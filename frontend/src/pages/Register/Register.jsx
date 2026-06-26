@@ -80,9 +80,8 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-teal-50/30 flex items-center justify-center p-4 relative overflow-hidden font-sans">
-      
-      {/* Decorative Background Elements */}
+    <div className="min-h-screen mt-15 w-full bg-gradient-to-br from-slate-50 to-teal-50/30 flex items-center justify-center p-4 relative overflow-hidden font-sans">
+
       <div className="absolute top-1/4 left-10 md:left-20 opacity-10 pointer-events-none">
         <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#005B52" strokeWidth="1.5">
           <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
@@ -91,12 +90,10 @@ const Register = () => {
         </svg>
       </div>
 
-      {/* Main Container Layering (Card & Side Deck) */}
       <div className="relative w-full max-w-4xl flex items-center justify-center">
-        
-        {/* Right Side Card Mockup (Voyage Odyssey Card) */}
+      
         <div className="absolute left-[45%] top-1/2 -translate-y-1/2 w-[380px] h-[460px] bg-[#005B52] rounded-[32px] shadow-2xl rotate-6 hidden lg:flex flex-col justify-end p-8 text-white overflow-hidden transform origin-center transition-all duration-300 hover:rotate-3">
-          {/* Subtle overlay graphics / image placeholder */}
+     
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
           <div className="relative z-10 space-y-2">
             <p className="text-sm tracking-widest uppercase opacity-60">Featured Journey</p>
@@ -104,10 +101,8 @@ const Register = () => {
           </div>
         </div>
 
-        {/* Foreground Sign Up Card */}
         <div className="relative z-10 w-full max-w-[440px] bg-white rounded-[36px] shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-slate-100 p-8 md:p-10 flex flex-col items-center">
-          
-          {/* App Icon */}
+ 
           <div className="w-12 h-12 bg-[#005B52] rounded-2xl flex items-center justify-center shadow-lg shadow-teal-900/20 mb-6">
             <Compass className="w-6 h-6 text-white" />
           </div>
@@ -120,84 +115,85 @@ const Register = () => {
             Join VoyageAI to experience travel planning redefined by artificial intelligence.
           </p>
 
-          {/* Form */}
-            <form className="w-full mt-8 space-y-5" onSubmit={handleSubmit}>
-            {/* Full Name Input */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-600 tracking-wide">Full Name</label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-                  <User className="w-4 h-4" />
-                </span>
-                
-                <input
-  type="text"
-  name="name"
-  value={formData.name}
-  onChange={handleChange}
-  placeholder="Alex Rivers"
-  className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-[#005B52] focus:ring-2 focus:ring-teal-500/10 transition-all text-slate-800 placeholder-slate-300"
-/>
-              </div>
-            </div>
 
-            {/* Email Input */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-600 tracking-wide">Email Address</label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-                  <Mail className="w-4 h-4" />
-                </span>
-                
-                <input
-  type="email"
-  name="email"
-  value={formData.email}
-  onChange={handleChange}
-  placeholder="alex@voyage.ai"
-  className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-[#005B52] focus:ring-2 focus:ring-teal-500/10 transition-all text-slate-800 placeholder-slate-300"
-/>
-              </div>
-            </div>
+          <form className="w-full mt-8 space-y-5" onSubmit={handleSubmit}>
 
-            {/* Password Input */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-600 tracking-wide">Password</label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-                  <Lock className="w-4 h-4" />
-                </span>
-                <input
-  type="password"
-  name="password"
-  value={formData.password}
-  onChange={handleChange}
-  placeholder="••••••••••••"
-  className="w-full pl-11 pr-11 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-[#005B52] focus:ring-2 focus:ring-teal-500/10 transition-all text-slate-800 placeholder-slate-300"
-/>
-               <button
-  type="submit"
-  disabled={loading}
-  className="w-full py-3.5 bg-[#005B52] text-white text-sm font-semibold rounded-2xl shadow-lg shadow-teal-900/10 hover:bg-[#00473F] active:scale-[0.98] transition-all mt-2 disabled:opacity-50"
->
-  {loading ? "Creating Account..." : "Create Account"}
-</button>
-              </div>
-            </div>
+  <div>
+    <label className="block text-xs font-semibold text-slate-600 mb-2">
+      Full Name
+    </label>
 
-            {/* Submit Button */}
-            
-          </form>
+    <div className="relative">
+      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
 
-         
-          {/* Footer Text */}
-          <p className="text-xs text-slate-500 mt-8">
-            Already have an account?{' '}
-            <Link to="/login" className="text-[#005B52] font-semibold hover:underline">
-              Sign in
-            </Link>
-          </p>
+      <input
+        type="text"
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        placeholder="Alex Rivers"
+        className="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#005B52]/20 focus:border-[#005B52]"
+      />
+    </div>
+  </div>
 
+  <div>
+    <label className="block text-xs font-semibold text-slate-600 mb-2">
+      Email Address
+    </label>
+
+    <div className="relative">
+      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+
+      <input
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        placeholder="alex@gmail.com"
+        className="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#005B52]/20 focus:border-[#005B52]"
+      />
+    </div>
+  </div>
+
+  <div>
+    <label className="block text-xs font-semibold text-slate-600 mb-2">
+      Password
+    </label>
+
+    <div className="relative">
+      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+
+      <input
+        type="password"
+        name="password"
+        value={formData.password}
+        onChange={handleChange}
+        placeholder="••••••••"
+        className="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#005B52]/20 focus:border-[#005B52]"
+      />
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    disabled={loading}
+    className="w-full py-3.5 bg-[#005B52] hover:bg-[#00473F] text-white rounded-2xl font-semibold transition disabled:opacity-50"
+  >
+    {loading ? "Creating Account..." : "Create Account"}
+  </button>
+</form>
+
+        
+<p className="text-sm text-slate-500 mt-6">
+  Already have an account?{" "}
+  <Link
+    to="/login"
+    className="text-[#005B52] font-semibold hover:underline"
+  >
+    Sign in
+  </Link>
+</p>
         </div>
       </div>
     </div>
