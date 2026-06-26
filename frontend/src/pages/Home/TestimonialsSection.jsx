@@ -1,105 +1,164 @@
-import React from 'react';
 
-const testimonials = [
+import React, { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.15, 
+    },
+  },
+};
+
+const wordVariants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+    filter: 'blur(20px)',
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 1.4,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+const cardEntryVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 40, 
+    filter: "blur(15px)" 
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    filter: "blur(0px)",
+    transition: { 
+      duration: 1.4, 
+      ease: [0.16, 1, 0.3, 1] 
+    } 
+  }
+};
+
+const testimonialsData = [
   {
-    id: 1,
-    text: `"VoyageAI literally saved my trip to Italy. I just uploaded my 12 different booking emails and it created a beautiful day-by-day map."`,
+    quote: `"VoyageAI is the first tool that actually understands the complexity of luxury travel. It synchronized my entire Maldives journey flawlessly."`,
     name: "Sarah Jenkins",
-    role: "Digital Nomad",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
+    role: "Global Director",
+    initials: "SJ"
   },
   {
-    id: 2,
-    text: `"The AI extraction is magic. It caught a flight delay before my airline even notified me. Best travel companion ever."`,
+    quote: `"The AI extraction felt like magic. It pulled data from 14 different confirmation formats and built a perfect map of my Asia tour."`,
     name: "Michael Chen",
-    role: "Executive at TechCorp",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
+    role: "Tech Lead",
+    initials: "MC"
   },
   {
-    id: 3,
-    text: `"Finally, a travel app that feels as premium as the hotels I stay in. Clean, efficient, and actually useful."`,
+    quote: `"Finally, a travel experience that matches the aesthetic of the places I visit. Beautiful, functional, and indispensable."`,
     name: "Elena Rodriguez",
-    role: "Luxury Travel Blogger",
-    image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80"
+    role: "Vogue Contributor",
+    initials: "ER"
   }
 ];
 
 const TestimonialsSection = () => {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { amount: 0.2, once: false });
+
+  const headingStart = "The choice of".split(" ");
+  const headingEnd = "travelers".split(" ");
+
   return (
-    <div className="bg-[#EDF2FC] min-h-screen py-16 px-6 md:px-12 lg:px-20 flex flex-col justify-center items-center">
-      <div className="max-w-9xl w-full">
-        
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div className="max-w-xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#0D233A] tracking-tight mb-4">
-              What explorers are saying
-            </h2>
-            <p className="text-gray-500 text-sm md:text-base leading-relaxed">
-              Join thousands of travelers who have upgraded their travel experience with VoyageAI.
-            </p>
-          </div>
-          
-          {/* Slider Arrows */}
-          <div className="flex gap-3">
-            <button className="w-11 h-11 rounded-full border border-gray-300 bg-white/60 flex items-center justify-center text-gray-700 hover:bg-white transition-colors shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
-            </button>
-            <button className="w-11 h-11 rounded-full border border-gray-300 bg-white/60 flex items-center justify-center text-gray-700 hover:bg-white transition-colors shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
-            </button>
-          </div>
-        </div>
+    <section id="testimonial"
+      ref={sectionRef}
+      className="w-full bg-[#11997E] py-24 px-6 sm:px-12 lg:px-16 flex items-center justify-center select-none overflow-hidden relative"
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10 pointer-events-none" />
+      <div className="absolute -top-[30%] left-1/2 -translate-x-1/2 w-[120%] h-[60%] bg-white/5 rounded-[100%] blur-3xl pointer-events-none" />
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((item) => (
-            <div 
-              key={item.id} 
-              className="bg-white rounded-[32px] p-8 md:p-10 shadow-sm border border-white flex flex-col justify-between min-h-[320px]"
-            >
-              <div>
-                {/* 5-Star Rating (Custom deep teal/green matching the image) */}
-                <div className="flex gap-1 mb-6 text-[#006652]">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                      <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
-                    </svg>
-                  ))}
-                </div>
+      <div className="max-w-7xl w-full flex flex-col items-center relative z-10">
 
-                {/* Review Text */}
-                <p className="text-gray-700 italic text-sm md:text-[15px] leading-relaxed font-medium">
-                  {item.text}
-                </p>
-              </div>
-
-              {/* User Identity */}
-              <div className="flex items-center gap-3 mt-8">
-                <img 
-                  src={item.image} 
-                  alt={item.name} 
-                  className="w-10 h-10 rounded-full object-cover grayscale border border-gray-100"
-                />
-                <div>
-                  <h4 className="text-sm font-bold text-gray-900 leading-tight">
-                    {item.name}
-                  </h4>
-                  <p className="text-xs text-gray-400">
-                    {item.role}
-                  </p>
-                </div>
-              </div>
-            </div>
+        <motion.h2 
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          className="text-3xl md:text-5xl font-bold tracking-tight text-white text-center mb-16 flex flex-wrap justify-center gap-x-[0.25em] leading-tight"
+        >
+          {headingStart.map((word, i) => (
+            <motion.span key={`start-${i}`} variants={wordVariants} className="inline-block">
+              {word}
+            </motion.span>
           ))}
-        </div>
+          <motion.span variants={wordVariants} className="text-[#7EFAD6] inline-block">
+            premium
+          </motion.span>
+          {headingEnd.map((word, i) => (
+            <motion.span key={`end-${i}`} variants={wordVariants} className="inline-block">
+              {word}
+            </motion.span>
+          ))}
+        </motion.h2>
+
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch"
+        >
+          {testimonialsData.map((item, index) => (
+            <motion.div
+              key={index}
+              variants={cardEntryVariants}
+              className="will-change-transform"
+            >
+          
+              <motion.div
+                animate={
+                  isInView
+                    ? {
+                        y: index % 2 === 0 ? [0, -10, 4, -10, 0] : [0, -6, 5, -6, 0],
+                        x: index % 3 === 0 ? [0, 3, -3, 2, 0] : [0, -3, 2, -1, 0],
+                        rotate: index % 2 === 0 ? [0, 0.4, -0.3, 0] : [0, -0.3, 0.4, 0]
+                      }
+                    : { y: 0, x: 0, rotate: 0 }
+                }
+                transition={{
+                  y: { repeat: Infinity, duration: 6 + index, ease: "easeInOut" },
+                  x: { repeat: Infinity, duration: 6.5 + index, ease: "easeInOut" },
+                  rotate: { repeat: Infinity, duration: 7 + index, ease: "easeInOut" }
+                }}
+                whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
+                className="h-full bg-[#E5F4F1] text-zinc-800 rounded-[32px] p-8 md:p-10 shadow-lg flex flex-col justify-between border border-white/20 will-change-transform"
+              >
+           
+                <p className="text-gray-700 text-base md:text-lg italic leading-relaxed font-medium mb-12">
+                  {item.quote}
+                </p>
+
+         
+                <div className="flex items-center gap-4 mt-auto">
+             
+                  <div className="w-12 h-12 bg-[#B2DDD5] text-[#11997E] rounded-full flex items-center justify-center font-bold text-sm tracking-wide shadow-inner shrink-0">
+                    {item.initials}
+                  </div>
+          
+                  <div>
+                    <h4 className="font-bold text-zinc-900 text-base leading-tight">{item.name}</h4>
+                    <p className="text-xs font-semibold text-zinc-500 mt-0.5 tracking-wide">{item.role}</p>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          ))}
+        </motion.div>
 
       </div>
-    </div>
+    </section>
   );
 };
 
