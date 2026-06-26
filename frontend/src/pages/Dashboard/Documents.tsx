@@ -29,7 +29,7 @@ const Documents = () => {
       });
 
       const response = await axios.post(
-        "http://localhost:3000/api/documents/upload",
+        "https://t-planner-1.onrender.com/documents/upload",
         formData,
         {
           headers: {

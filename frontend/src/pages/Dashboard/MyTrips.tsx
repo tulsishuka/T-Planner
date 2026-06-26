@@ -18,7 +18,7 @@ const MyTrips = () => {
       const token = localStorage.getItem("token");
 
       const { data } = await axios.get(
-        "http://localhost:3000/api/documents",
+        "https://t-planner-1.onrender.com/api/documents",
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -39,7 +39,7 @@ const Login = () => {
 
     try {
       const res = await axios.post<LoginResponse>(
-        "http://localhost:3000/api/v1/auth/login",
+        "https://t-planner-1.onrender.com/api/v1/auth/login",
         formData
       );
 

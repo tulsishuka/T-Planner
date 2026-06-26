@@ -13,7 +13,7 @@ const SharedTrip = () => {
     const fetchTrip = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/api/documents/share/${shareId}`
+          `https://t-planner-1.onrender.com/api/documents/share/${shareId}`
         );
         console.log("SHARED TRIP:", data.trip);
         setTrip(data.trip);

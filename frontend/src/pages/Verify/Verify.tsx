@@ -43,7 +43,7 @@ const Verify: React.FC = () => {
       });
 
       const res = await axios.post(
-        "http://localhost:3000/api/v1/auth/verify-otp",
+        "https://t-planner-1.onrender.com/api/v1/auth/verify-otp",
         {
           email,
           otp: otp.trim(),

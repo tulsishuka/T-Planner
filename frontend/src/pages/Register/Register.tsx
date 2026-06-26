@@ -18,14 +18,7 @@ const Register = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
 
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const { name, value } = e.target;
@@ -36,8 +29,6 @@ const Register = () => {
   }));
 };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
@@ -57,7 +48,7 @@ const Register = () => {
       setLoading(true);
 
       await axios.post(
-        "http://localhost:3000/api/v1/auth/register",
+        "https://t-planner-1.onrender.com/api/v1/auth/register",
         {
           name: formData.name,
           email: formData.email,
@@ -81,12 +72,7 @@ const Register = () => {
         });
       }, 1000);
     } 
-    // catch (error) {
-    //   toast.error(
-    //     error.response?.data?.message ||
-    //       "Account already exists or something went wrong"
-    //   );
-    // } 
+  
     catch (error) {
   const err = error as AxiosError<{ message: string }>;
 
