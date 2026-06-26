@@ -21,12 +21,6 @@ router.post(
   upload.array("document", 20), // up to 20 files
   uploadDocument
 );
-// router.post(
-//   "/upload",
-//   protectedMiddleware,
-//   upload.array("document"), // ✅ FIX HERE
-//   uploadDocument
-// );
 
 router.get("/", protectedMiddleware, getDocuments);
 

@@ -12,16 +12,20 @@ import MyTrips from "./pages/Dashboard/MyTrips";
 import Documents from "./pages/Dashboard/Documents";
 import Verify from "./pages/Verify/Verify";
 import SharedTrip from "./pages/SharedTrip/SharedTrip";
+import TripDetail from "./pages/Dashboard/TripDetail";
+import ScrollToHash from "./components/ScrollToHash";
 
 
 function App() {
   return (
     <>
       <Navbar />
-
+<ScrollToHash/>
       <Routes>
-        <Route path="/" element={<Home />} />
 
+        <Route path="/" element={<Home />} />
+           
+   <Route path="/TripDetail" element={< TripDetail/>} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
           <Route path="/share/:shareId" element={<SharedTrip />} />

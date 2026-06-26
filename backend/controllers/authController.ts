@@ -4,9 +4,7 @@ import { sendEmail } from "../utils/sendEmail";
 import asyncHandler from "../middlewares/asyncHandler";
 import { generateToken } from "../utils/generateToken";
 
-/**
- * @desc Register user and send OTP
- */
+
 export const register = asyncHandler(async (req: Request, res: Response) => {
   const user = await authService.registerUser(req.body);
 
@@ -22,9 +20,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-/**
- * @desc Verify account using OTP
- */
+
 export const verify = asyncHandler(async (req: Request, res: Response) => {
   const { email, otp } = req.body;
 
@@ -47,7 +43,7 @@ export const login = asyncHandler(
       password
     );
 
-    // User not verified
+
     if (
       typeof result === "object" &&
       "requiresVerification" in result
@@ -78,9 +74,7 @@ export const login = asyncHandler(
   }
 );
 
-/**
- * @desc Reset password using old password
- */
+
 export const forgot = asyncHandler(async (req: Request, res: Response) => {
   const { email, oldPassword, newPassword } = req.body;
 

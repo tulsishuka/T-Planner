@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#F4F7FC] text-gray-600 py-12 px-6 md:px-12 lg:px-20 border-t border-gray-100">
+    <footer className="bg-white text-gray-600 py-12 px-6 md:px-12 lg:px-20 border-t border-gray-100">
       <div className="max-w-6xl mx-auto">
         
         {/* Main Footer Content */}
@@ -70,16 +70,6 @@ const Footer = () => {
               </ul>
             </div>
 
-          </div>
-        </div>
-
-        {/* Bottom Bar Separator */}
-        <div className="border-t border-gray-200/60 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-gray-400 font-medium">
-          <div>
-            © 2024 VoyageAI. All rights reserved.
-          </div>
-          <div className="flex items-center gap-1">
-            Made with <span className="text-red-400">❤️</span> for modern travelers.
           </div>
         </div>
 

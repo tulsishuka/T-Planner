@@ -12,7 +12,6 @@ export const registerUser = async (data: any) => {
 
   const hashedPassword = await bcrypt.hash(data.password, 12);
 
-  // Generate strong 6-digit OTP
   const otp = crypto.randomInt(100000, 1000000).toString();
 
   const user = await User.create({
@@ -39,12 +38,7 @@ export const verifyOtp = async (
     throw new AppError("User not found", 404);
   }
 
-  console.log("============== OTP DEBUG ==============");
-  console.log("Email:", email);
-  console.log("DB OTP:", user.otp);
-  console.log("Entered OTP:", otp);
-  console.log("Expires:", user.otpExpires);
-  console.log("=======================================");
+
 
   if (String(user.otp) !== String(otp)) {
     throw new AppError("Invalid OTP", 400);
@@ -88,7 +82,6 @@ export const loginUser = async (
     throw new AppError("Invalid password", 401);
   }
 
-  // User not verified
   if (!user.isVerified) {
     const otp = crypto
       .randomInt(100000, 1000000)
@@ -116,7 +109,6 @@ export const loginUser = async (
   return user;
 };
 
-// Reset password using old password (no OTP)
 export const resetPasswordWithOld = async (email: string, oldPassword: string, newPassword: string) => {
   const user = await User.findOne({ email });
   if (!user) throw new AppError("User not found", 404);

@@ -105,84 +105,15 @@ Return ONLY JSON
 
 
 
-// export const uploadDocument = asyncHandler(
+// export const getDocuments = asyncHandler(
 //   async (req: AuthRequest, res: Response) => {
-//     const files = req.files as Express.Multer.File[];
-
-//     if (!files || files.length === 0) {
-//       res.status(400);
-//       throw new Error("Please upload files");
-//     }
-
-//     const shareId = uuidv4();
-
-//     const fileResults = [];
-
-//     for (const file of files) {
-//       let rawResponse = "";
-//       let extractedData: any = {};
-
-//       // IMAGE
-//       if (file.mimetype.startsWith("image/")) {
-//         const base64 = fs.readFileSync(file.path).toString("base64");
-
-//         const result = await model.generateContent([
-//           {
-//             inlineData: {
-//               data: base64,
-//               mimeType: file.mimetype,
-//             },
-//           },
-//           `Return ONLY JSON with flight details`,
-//         ]);
-
-//         rawResponse = result.response.text();
-//       }
-
-//       // PDF
-//       if (file.mimetype === "application/pdf") {
-//         const text = await extractTextFromFile(file.path, file.mimetype);
-
-//         const result = await model.generateContent(`
-// Extract JSON from:
-// ${text}
-// Return ONLY JSON
-//         `);
-
-//         rawResponse = result.response.text();
-//       }
-
-//       // SAFE JSON PARSE
-//       const match = rawResponse.match(/\{[\s\S]*\}/);
-//       if (match) {
-//         try {
-//           extractedData = JSON.parse(match[0]);
-//         } catch {
-//           extractedData = {};
-//         }
-//       }
-
-//       fileResults.push({
-//         fileName: file.filename,
-//         filePath: file.path,
-//         fileType: file.mimetype,
-//         extractedData,
-//       });
-//     }
-
-//     // SAVE ONLY ONE DOCUMENT
-//     const document = await TravelDocument.create({
+//     const docs = await TravelDocument.find({
 //       userId: req.user._id,
-//       shareId,
-//       startDate: req.body.startDate,
-//       endDate: req.body.endDate,
-//       notes: req.body.notes,
-//       files: fileResults,
-//     });
+//     }).sort({ createdAt: -1 });
 
-//     return res.status(201).json({
+//     res.status(200).json({
 //       success: true,
-//       document,
+//       docs,
 //     });
 //   }
 // );
@@ -196,10 +127,15 @@ export const getDocuments = asyncHandler(
 
     res.status(200).json({
       success: true,
+      user: {
+        name: req.user.name,
+        email: req.user.email,
+      },
       docs,
     });
   }
 );
+
 
 export const updateDocument = asyncHandler(
   async (req: AuthRequest, res: Response) => {

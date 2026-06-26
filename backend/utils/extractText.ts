@@ -6,7 +6,7 @@ export const extractTextFromFile = async (
   mimeType: string
 ) => {
   try {
-    // PDF
+ 
     if (mimeType === "application/pdf") {
       const buffer = fs.readFileSync(filePath);
 
@@ -17,7 +17,6 @@ console.log(data.text);
       return data.text;
     }
 
-    // Images (handled by Gemini or other service later)
     return "";
   } catch (error) {
     console.error("Error parsing file:", error);

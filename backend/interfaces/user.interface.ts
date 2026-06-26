@@ -14,4 +14,3 @@ export interface IUser extends Document {
   resetToken?: string;
   resetTokenExpires?: Date;
 }
-// role: "user" | "admin"; 
