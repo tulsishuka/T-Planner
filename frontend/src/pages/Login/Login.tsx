@@ -2,8 +2,17 @@
 import React, { useState } from "react";
 import { Mail, Lock } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "react-toastify";
+
+// Define strict types for the backend response structure
+interface LoginResponse {
+  requiresVerification?: boolean;
+  email?: string;
+  token?: string;
+  user?: Record<string, unknown>;
+  message?: string;
+}
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,20 +24,21 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
+  // Added explicit React HTML Input change event typing
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
+  // Added explicit React Form event typing and typed Axios error catch blocks
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setLoading(true);
 
     try {
-      const res = await axios.post(
+      const res = await axios.post<LoginResponse>(
         "http://localhost:3000/api/v1/auth/login",
         formData
       );
@@ -45,23 +55,27 @@ const Login = () => {
         return;
       }
 
-      localStorage.setItem("token", res.data.token);
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+      }
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(res.data.user)
-      );
+      if (res.data.user) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify(res.data.user)
+        );
+      }
 
       console.log(
-        JSON.parse(localStorage.getItem("user"))
+        JSON.parse(localStorage.getItem("user") || "{}")
       );
 
       toast.success("Login Successful");
-
       navigate("/dashboard");
     } catch (error) {
+      const axiosError = error as AxiosError<LoginResponse>;
       toast.error(
-        error.response?.data?.message ||
+        axiosError.response?.data?.message ||
           "Login failed"
       );
     } finally {
@@ -95,7 +109,7 @@ const Login = () => {
           className="w-full mt-6 space-y-4"
           onSubmit={handleSubmit}
         >
- 
+
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-slate-700">
               Email Address
@@ -146,7 +160,8 @@ const Login = () => {
                 required
                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-[#005B52] focus:ring-1 focus:ring-[#005B52] transition-all text-slate-800 placeholder-slate-300"
               />
-            </div>  </div>
+            </div>
+          </div>
 
           <button
             type="submit"

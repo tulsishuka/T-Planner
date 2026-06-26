@@ -1,8 +1,8 @@
 
 import React, { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, Variants } from 'framer-motion';
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -11,7 +11,7 @@ const containerVariants = {
   },
 };
 
-const wordVariants = {
+const wordVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 20,
@@ -28,7 +28,7 @@ const wordVariants = {
   },
 };
 
-const cardEntryVariants = {
+const cardEntryVariants: Variants = {
   hidden: { 
     opacity: 0, 
     y: 40, 
@@ -45,7 +45,14 @@ const cardEntryVariants = {
   }
 };
 
-const testimonialsData = [
+interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+  initials: string;
+}
+
+const testimonialsData: Testimonial[] = [
   {
     quote: `"VoyageAI is the first tool that actually understands the complexity of luxury travel. It synchronized my entire Maldives journey flawlessly."`,
     name: "Sarah Jenkins",
@@ -67,14 +74,16 @@ const testimonialsData = [
 ];
 
 const TestimonialsSection = () => {
-  const sectionRef = useRef(null);
+  // Explicitly typed layout reference for perfect type matching
+  const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { amount: 0.2, once: false });
 
   const headingStart = "The choice of".split(" ");
   const headingEnd = "travelers".split(" ");
 
   return (
-    <section id="testimonial"
+    <section 
+      id="testimonial"
       ref={sectionRef}
       className="w-full bg-[#11997E] py-24 px-6 sm:px-12 lg:px-16 flex items-center justify-center select-none overflow-hidden relative"
     >
@@ -116,7 +125,6 @@ const TestimonialsSection = () => {
               variants={cardEntryVariants}
               className="will-change-transform"
             >
-          
               <motion.div
                 animate={
                   isInView
@@ -135,14 +143,11 @@ const TestimonialsSection = () => {
                 whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
                 className="h-full bg-[#E5F4F1] text-zinc-800 rounded-[32px] p-8 md:p-10 shadow-lg flex flex-col justify-between border border-white/20 will-change-transform"
               >
-           
                 <p className="text-gray-700 text-base md:text-lg italic leading-relaxed font-medium mb-12">
                   {item.quote}
                 </p>
 
-         
                 <div className="flex items-center gap-4 mt-auto">
-             
                   <div className="w-12 h-12 bg-[#B2DDD5] text-[#11997E] rounded-full flex items-center justify-center font-bold text-sm tracking-wide shadow-inner shrink-0">
                     {item.initials}
                   </div>

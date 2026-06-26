@@ -1,8 +1,8 @@
 
 import React, { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, Variants } from 'framer-motion';
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -11,8 +11,7 @@ const containerVariants = {
   },
 };
 
-
-const wordVariants = {
+const wordVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 20,
@@ -29,7 +28,7 @@ const wordVariants = {
   },
 };
 
-const elementFadeUp = {
+const elementFadeUp: Variants = {
   hidden: { opacity: 0, y: 25, filter: 'blur(12px)' },
   visible: {
     opacity: 1,
@@ -40,7 +39,8 @@ const elementFadeUp = {
 };
 
 const HowItWorksSection = () => {
-  const sectionRef = useRef(null);
+  // Explicitly typed layout reference for perfect type compatibility
+  const sectionRef = useRef<HTMLElement>(null);
 
   const isInView = useInView(sectionRef, { amount: 0.2, once: false });
 
@@ -70,13 +70,11 @@ const HowItWorksSection = () => {
         }}
         className="w-full max-w-7xl bg-gradient-to-br from-[#20354B] to-[#142232] text-white rounded-[32px] px-8 py-16 md:py-24 text-center shadow-xl relative overflow-hidden will-change-transform"
       >
- -
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
         >
-    
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6 flex flex-wrap justify-center gap-x-[0.25em] leading-tight">
             {titleText.map((word, i) => (
               <motion.span key={i} variants={wordVariants} className="inline-block">
@@ -118,7 +116,6 @@ const HowItWorksSection = () => {
             </motion.button>
           </motion.div>
         </motion.div>
-
       </motion.div>
     </section>
   );

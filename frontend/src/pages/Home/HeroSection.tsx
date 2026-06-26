@@ -1,8 +1,10 @@
+
 import React, { useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { Play, FileText, Sparkles } from "lucide-react";
+import { motion, useInView, Variants } from "framer-motion";
+import { FileText, Sparkles } from "lucide-react";
 import { Link } from 'react-router-dom';
-const containerVariants = {
+
+const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -11,7 +13,7 @@ const containerVariants = {
   },
 };
 
-const wordVariants = {
+const wordVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 20,
@@ -28,7 +30,7 @@ const wordVariants = {
   },
 };
 
-const genericFadeUp = {
+const genericFadeUp: Variants = {
   hidden: { opacity: 0, y: 25, filter: "blur(12px)" },
   visible: { 
     opacity: 1, 
@@ -39,7 +41,8 @@ const genericFadeUp = {
 };
 
 const HeroSection = () => {
-  const sectionRef = useRef(null);
+  // Explicitly typed layout reference for perfect type matching
+  const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { amount: 0.2, once: false });
 
   const headingLine1 = "Turn Travel Bookings into".split(" ");
@@ -50,7 +53,6 @@ const HeroSection = () => {
       ref={sectionRef} 
       className="relative min-h-screen overflow-hidden bg-black flex items-center"
     >
-
       <motion.div
         initial={{ scale: 1.15, opacity: 0 }}
         animate={isInView ? { scale: 1, opacity: 0.8 } : { scale: 1.15, opacity: 0 }}
@@ -66,9 +68,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-black/20" />
 
       <div className="relative z-10 max-w-7xl mx-auto w-full px-6 sm:px-12 lg:px-0 py-20 min-h-screen flex flex-col justify-between">
-
         <div className="max-w-2xl my-auto space-y-6">
-
           <motion.div
             variants={genericFadeUp}
             initial="hidden"
@@ -125,23 +125,20 @@ const HeroSection = () => {
             className="flex flex-wrap gap-4 pt-2"
           >
             <Link to="register">
-            <motion.button
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.96 }}
-              className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-xl font-semibold shadow-xl"
-            >
-              <FileText className="w-5 h-5" />
-              Start Your Journey
-            </motion.button>
-</Link>
-
-           
+              <motion.button
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.96 }}
+                className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-xl font-semibold shadow-xl"
+              >
+                <FileText className="w-5 h-5" />
+                Start Your Journey
+              </motion.button>
+            </Link>
           </motion.div>
         </div>
 
         <motion.div
           animate={{ 
-
             y: [0, -12, 4, -12, 0], 
             x: [0, 4, -4, 2, 0],
             rotate: [0, 0.5, -0.5, 0.3, 0]
@@ -187,7 +184,6 @@ const HeroSection = () => {
             </div>
           </div>
         </motion.div>
-
       </div>
     </section>
   );

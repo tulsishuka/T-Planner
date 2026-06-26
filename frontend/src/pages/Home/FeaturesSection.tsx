@@ -1,8 +1,8 @@
 
 import React, { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, Variants } from 'framer-motion';
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -11,7 +11,7 @@ const containerVariants = {
   },
 };
 
-const wordVariants = {
+const wordVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 15,
@@ -28,8 +28,7 @@ const wordVariants = {
   },
 };
 
-
-const elementFadeUp = {
+const elementFadeUp: Variants = {
   hidden: { opacity: 0, y: 20, filter: 'blur(12px)' },
   visible: {
     opacity: 1,
@@ -40,7 +39,8 @@ const elementFadeUp = {
 };
 
 const FeaturesSection = () => {
-  const sectionRef = useRef(null);
+  // Using HTMLElement matches perfectly with <section> and useInView's internal requirements
+  const sectionRef = useRef<HTMLElement>(null);
 
   const isInView = useInView(sectionRef, { amount: 0.15, once: false });
 

@@ -3,7 +3,7 @@ import { User, Mail, Lock, Eye, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "react-hot-toast";
 
 const Register = () => {
@@ -18,17 +18,28 @@ const Register = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value } = e.target;
+
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
     if (!formData.name.trim()) {
       return toast.error("Please enter your name");
@@ -69,12 +80,22 @@ const Register = () => {
           state: { email: userEmail },
         });
       }, 1000);
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-          "Account already exists or something went wrong"
-      );
-    } finally {
+    } 
+    // catch (error) {
+    //   toast.error(
+    //     error.response?.data?.message ||
+    //       "Account already exists or something went wrong"
+    //   );
+    // } 
+    catch (error) {
+  const err = error as AxiosError<{ message: string }>;
+
+  toast.error(
+    err.response?.data?.message ||
+      "Account already exists or something went wrong"
+  );
+}
+    finally {
       setLoading(false);
     }
   };
